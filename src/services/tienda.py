@@ -3,11 +3,11 @@ Servicio de la tienda que maneja la lógica de negocio.
 Esta clase implementa el patrón de servicio para separar la lógica de negocio de la UI.
 """
 
-from typing import List, Dict, Optional, Union
 
 # Corrección de imports para ejecución directa
-from models.mueble import Mueble
 from models.composicion.comedor import Comedor
+from models.mueble import Mueble
+
 # TODO: Importar las clases necesarias
 
 
@@ -132,10 +132,10 @@ class TiendaMuebles:
             nombre_tienda: Nombre de la tienda
         """
         self._nombre = nombre_tienda
-        self._inventario: List[Mueble] = []
-        self._comedores: List[Comedor] = []
-        self._ventas_realizadas: List[Dict] = []
-        self._descuentos_activos: Dict[str, float] = {}
+        self._inventario: list[Mueble] = []
+        self._comedores: list[Comedor] = []
+        self._ventas_realizadas: list[dict] = []
+        self._descuentos_activos: dict[str, float] = {}
         # Campos acumulativos
         self._total_muebles_vendidos: int = 0
         self._valor_total_ventas: float = 0.0
@@ -185,7 +185,7 @@ class TiendaMuebles:
             f"Comedor {getattr(comedor, 'nombre', str(comedor))} agregado exitosamente"
         )
 
-    def buscar_muebles_por_nombre(self, nombre: str) -> List["Mueble"]:
+    def buscar_muebles_por_nombre(self, nombre: str) -> list["Mueble"]:
         """
         Busca muebles por nombre (búsqueda parcial, case-insensitive).
         Args:
@@ -204,7 +204,7 @@ class TiendaMuebles:
 
     def filtrar_por_precio(
         self, precio_min: float = 0, precio_max: float = float("inf")
-    ) -> List["Mueble"]:
+    ) -> list["Mueble"]:
         """
         Filtra muebles por rango de precios.
 
@@ -226,7 +226,7 @@ class TiendaMuebles:
                 continue  # Saltar muebles con errores de precio
         return resultados
 
-    def filtrar_por_material(self, material: str) -> List["Mueble"]:
+    def filtrar_por_material(self, material: str) -> list["Mueble"]:
         """
         Filtra muebles por material.
 
@@ -251,7 +251,7 @@ class TiendaMuebles:
                 continue
         return resultados
 
-    def obtener_muebles_por_tipo(self, tipo_clase: type) -> List["Mueble"]:
+    def obtener_muebles_por_tipo(self, tipo_clase: type) -> list["Mueble"]:
         """
         Obtiene todos los muebles de un tipo específico.
 
@@ -320,7 +320,7 @@ class TiendaMuebles:
 
     def realizar_venta(
         self, mueble: "Mueble", cliente: str = "Cliente Anónimo"
-    ) -> Dict:
+    ) -> dict:
         """
         Procesa la venta de un mueble.
         Args:
@@ -362,7 +362,7 @@ class TiendaMuebles:
         except Exception as e:
             return {"error": f"Error al procesar la venta: {str(e)}"}
 
-    def _contar_tipos_muebles(self) -> Dict[str, int]:
+    def _contar_tipos_muebles(self) -> dict[str, int]:
         """
         Cuenta cuántos muebles hay de cada tipo.
         Método privado auxiliar.

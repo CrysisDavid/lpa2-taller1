@@ -1,0 +1,17 @@
+[tool.ruff]
+# Longitud máxima de línea recomendada
+line-length = 100
+target-version = "py312"
+
+[tool.ruff.lint]
+# Seleccionamos reglas comunes (E: pycodestyle, F: Pyflakes, I: isort, UP: pyupgrade)
+select = ["E", "F", "I", "UP"]
+ignore = []
+
+[tool.pytest.ini_options]
+minversion = "6.0"
+addopts = "-ra -q"
+testpaths = [
+    "test",
+]
+pythonpath = ["src"]
