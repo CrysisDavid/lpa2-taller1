@@ -29,7 +29,7 @@ jobs:
 
       - name: 1. Ejecutar Ruff (Linter)
         run: |
-          ruff check src/ test/
+          ruff check src/ tests/
 
       - name: 2. Ejecutar Bandit (Seguridad)
         run: |

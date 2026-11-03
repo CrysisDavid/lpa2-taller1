@@ -2,12 +2,12 @@ from io import StringIO
 from unittest.mock import patch
 
 from rich.console import Console
-
 from services.tienda import TiendaMuebles
+from ui.menu import MenuTienda
+
 from src.models.composicion.comedor import Comedor
 from src.models.concretos.mesa import Mesa
 from src.models.concretos.silla import Silla
-from ui.menu import MenuTienda
 
 
 def crear_menu():

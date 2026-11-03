@@ -3,8 +3,6 @@ import time
 from models.mueble import Mueble
 from rich.console import Console
 from rich.panel import Panel
-
-# Corrección de imports para ejecución directa
 from rich.prompt import Confirm, IntPrompt, Prompt
 from rich.table import Table
 from rich.text import Text
