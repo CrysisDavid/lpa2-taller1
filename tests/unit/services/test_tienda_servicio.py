@@ -1,6 +1,6 @@
 import pytest
-from services.tienda import TiendaMuebles
 
+from services.tienda import TiendaMuebles
 from src.models.composicion.comedor import Comedor
 from src.models.concretos.mesa import Mesa
 from src.models.concretos.silla import Silla
