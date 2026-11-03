@@ -22,8 +22,8 @@ class TestSilla:
         assert silla_basica.material == "Madera"
         assert silla_basica.precio_base == 50.0
 
-        assert silla_basica.tiene_ruedas == False
-        assert silla_basica.altura_regulable == False
+        assert not silla_basica.tiene_ruedas
+        assert not silla_basica.altura_regulable
 
     def test_calcular_precio(self, silla_basica):
         precio = silla_basica.calcular_precio()
@@ -35,3 +35,18 @@ class TestSilla:
         descripcion = silla_basica.obtener_descripcion()
         assert "Silla Basica" in descripcion
         assert "Madera" in descripcion
+
+    def test_regular_altura_y_silla_de_oficina(self):
+        silla_oficina = Silla(
+            "Silla oficina",
+            "Metal",
+            "Negro",
+            100,
+            altura_regulable=True,
+            tiene_ruedas=True,
+        )
+
+        assert silla_oficina.regular_altura(75) == "Altura ajustada a 75 cm"
+        assert silla_oficina.regular_altura(39) == ("La altura debe estar entre 40 y 100 cm")
+        assert silla_oficina.es_silla_oficina() is True
+        assert Silla("Silla fija", "Madera", "Natural", 50).es_silla_oficina() is False

@@ -18,48 +18,21 @@ class TiendaMuebles:
         Returns:
             dict: Diccionario con estadísticas
         """
-        try:
-            total_muebles = len(self._inventario)
-            total_comedores = len(self._comedores)
-            valor_inventario = 0
-            for mueble in self._inventario:
-                try:
-                    valor_inventario += mueble.calcular_precio()
-                except Exception:
-                    pass
-            tipos_muebles = {}
-            for mueble in self._inventario:
-                tipo = type(mueble).__name__
-                tipos_muebles[tipo] = tipos_muebles.get(tipo, 0) + 1
-            ventas_realizadas = (
-                len(self._ventas_realizadas)
-                if hasattr(self, "_ventas_realizadas")
-                else 0
-            )
-            # Acumulativos
-            total_muebles_vendidos = getattr(self, "_total_muebles_vendidos", 0)
-            valor_total_ventas = getattr(self, "_valor_total_ventas", 0.0)
-            return {
-                "total_muebles": total_muebles,
-                "total_comedores": total_comedores,
-                "valor_inventario": valor_inventario,
-                "tipos_muebles": tipos_muebles,
-                "descuentos_activos": self._descuentos_activos.copy(),
-                "ventas_realizadas": ventas_realizadas,
-                "total_muebles_vendidos": total_muebles_vendidos,
-                "valor_total_ventas": valor_total_ventas,
-            }
-        except Exception:
-            return {
-                "total_muebles": 0,
-                "total_comedores": 0,
-                "valor_inventario": 0.0,
-                "tipos_muebles": {},
-                "descuentos_activos": {},
-                "ventas_realizadas": 0,
-                "total_muebles_vendidos": 0,
-                "valor_total_ventas": 0.0,
-            }
+        tipos_muebles = {}
+        for mueble in self._inventario:
+            tipo = type(mueble).__name__
+            tipos_muebles[tipo] = tipos_muebles.get(tipo, 0) + 1
+
+        return {
+            "total_muebles": len(self._inventario),
+            "total_comedores": len(self._comedores),
+            "valor_inventario": sum(mueble.calcular_precio() for mueble in self._inventario),
+            "tipos_muebles": tipos_muebles,
+            "descuentos_activos": self._descuentos_activos.copy(),
+            "ventas_realizadas": len(self._ventas_realizadas),
+            "total_muebles_vendidos": self._total_muebles_vendidos,
+            "valor_total_ventas": self._valor_total_ventas,
+        }
 
     def estadisticas(self) -> dict:
         """
@@ -67,57 +40,17 @@ class TiendaMuebles:
         Returns:
             dict: Diccionario con estadísticas
         """
-        try:
-            total_muebles = len(self._inventario)
-            total_comedores = len(self._comedores)
-            valor_inventario = 0
-            for mueble in self._inventario:
-                try:
-                    valor_inventario += mueble.calcular_precio()
-                except Exception:
-                    pass
-            tipos_muebles = {}
-            for mueble in self._inventario:
-                tipo = type(mueble).__name__
-                tipos_muebles[tipo] = tipos_muebles.get(tipo, 0) + 1
-            ventas_realizadas = (
-                len(self._ventas_realizadas)
-                if hasattr(self, "_ventas_realizadas")
-                else 0
-            )
-            total_muebles_vendidos = getattr(self, "_total_muebles_vendidos", 0)
-            valor_total_ventas = getattr(self, "_valor_total_ventas", 0.0)
-            return {
-                "total_muebles": total_muebles,
-                "total_comedores": total_comedores,
-                "valor_inventario": valor_inventario,
-                "tipos_muebles": tipos_muebles,
-                "descuentos_activos": self._descuentos_activos.copy(),
-                "ventas_realizadas": ventas_realizadas,
-                "total_muebles_vendidos": total_muebles_vendidos,
-                "valor_total_ventas": valor_total_ventas,
-            }
-        except Exception:
-            return {
-                "total_muebles": 0,
-                "total_comedores": 0,
-                "valor_inventario": 0.0,
-                "tipos_muebles": {},
-                "descuentos_activos": {},
-                "ventas_realizadas": 0,
-                "total_muebles_vendidos": 0,
-                "valor_total_ventas": 0.0,
-            }
+        return self.obtener_estadisticas()
 
     """
     Clase que maneja toda la lógica de negocio de la tienda de muebles.
-    
+
     Esta clase implementa:
     - Gestión de inventario
     - Búsquedas y filtros
     - Cálculos de precios y descuentos
     - Operaciones de venta
-    
+
     Conceptos OOP aplicados:
     - Encapsulación: Agrupa toda la lógica relacionada con la tienda
     - Abstracción: Oculta la complejidad del manejo de inventario
@@ -139,7 +72,6 @@ class TiendaMuebles:
         # Campos acumulativos
         self._total_muebles_vendidos: int = 0
         self._valor_total_ventas: float = 0.0
-        pass
 
     @property
     def nombre(self) -> str:
@@ -181,9 +113,7 @@ class TiendaMuebles:
         if comedor is None:
             return "Error: El comedor no puede ser None"
         self._comedores.append(comedor)
-        return (
-            f"Comedor {getattr(comedor, 'nombre', str(comedor))} agregado exitosamente"
-        )
+        return f"Comedor {getattr(comedor, 'nombre', str(comedor))} agregado exitosamente"
 
     def buscar_muebles_por_nombre(self, nombre: str) -> list["Mueble"]:
         """
@@ -202,9 +132,7 @@ class TiendaMuebles:
                 resultados.append(mueble)
         return resultados
 
-    def filtrar_por_precio(
-        self, precio_min: float = 0, precio_max: float = float("inf")
-    ) -> list["Mueble"]:
+    def filtrar_por_precio(self, precio_min: float = 0, precio_max: float = float("inf")) -> list["Mueble"]:
         """
         Filtra muebles por rango de precios.
 
@@ -218,12 +146,9 @@ class TiendaMuebles:
             precio_min = 0
         resultados = []
         for mueble in self._inventario:
-            try:
-                precio = mueble.calcular_precio()
-                if precio_min <= precio <= precio_max:
-                    resultados.append(mueble)
-            except Exception:
-                continue  # Saltar muebles con errores de precio
+            precio = mueble.calcular_precio()
+            if precio_min <= precio <= precio_max:
+                resultados.append(mueble)
         return resultados
 
     def filtrar_por_material(self, material: str) -> list["Mueble"]:
@@ -240,15 +165,9 @@ class TiendaMuebles:
         material_lower = material.lower().strip()
         resultados = []
         for mueble in self._inventario:
-            try:
-                if (
-                    hasattr(mueble, "material")
-                    and mueble.material
-                    and mueble.material.lower().strip() == material_lower
-                ):
-                    resultados.append(mueble)
-            except Exception:
-                continue
+            material_mueble = getattr(mueble, "material", None)
+            if material_mueble and material_mueble.lower().strip() == material_lower:
+                resultados.append(mueble)
         return resultados
 
     def obtener_muebles_por_tipo(self, tipo_clase: type) -> list["Mueble"]:
@@ -276,22 +195,10 @@ class TiendaMuebles:
         Returns:
             float: Valor total de todos los muebles en inventario
         """
-        # TODO: Implementar cálculo de valor total
-        # valor_total = 0
-        # for mueble in self._inventario:
-        #     try:
-        #         valor_total += mueble.calcular_precio()
-        #     except Exception:
-        #         continue  # Saltar muebles con errores
 
-        # for comedor in self._comedores:
-        #     try:
-        #         valor_total += comedor.calcular_precio_total()
-        #     except Exception:
-        #         continue
-
-        # return round(valor_total, 2)
-        pass
+        valor_muebles = sum(mueble.calcular_precio() for mueble in self._inventario)
+        valor_comedores = sum(comedor.calcular_precio_total() for comedor in self._comedores)
+        return round(valor_muebles + valor_comedores, 2)
 
     def aplicar_descuento(self, categoria: str, porcentaje: float) -> str:
         """
@@ -314,13 +221,9 @@ class TiendaMuebles:
         # Capitalizar para coincidir con el nombre de clase
         categoria_clase = categoria_lower.capitalize()
         self._descuentos_activos[categoria_clase] = porcentaje / 100
-        return (
-            f"Descuento del {porcentaje}% aplicado a la categoría '{categoria_clase}'"
-        )
+        return f"Descuento del {porcentaje}% aplicado a la categoría '{categoria_clase}'"
 
-    def realizar_venta(
-        self, mueble: "Mueble", cliente: str = "Cliente Anónimo"
-    ) -> dict:
+    def realizar_venta(self, mueble: "Mueble", cliente: str = "Cliente Anónimo") -> dict:
         """
         Procesa la venta de un mueble.
         Args:

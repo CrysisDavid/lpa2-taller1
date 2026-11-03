@@ -1,6 +1,6 @@
 [tool.ruff]
 # Longitud máxima de línea recomendada
-line-length = 88
+line-length = 130
 target-version = "py312"
 
 [tool.ruff.lint]
